@@ -4,12 +4,27 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var jwt    = require('jsonwebtoken');
 
+
+var mongoose = require('mongoose');
+
+var config = require('./models/config');
 var index = require('./routes/index');
 var users = require('./routes/users');
+var cities = require('./routes/cities');
+var retailer = require('./routes/retailer');
+var categories = require('./routes/categories');
+
+// including models here
 
 var app = express();
 
+mongoose.connect(config.database);
+
+var db = mongoose.connection;
+//Bind connection to error event (to get notification of connection errors)
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -24,7 +39,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/retailer', retailer);
+app.use('/cities',cities);
+app.use('/categories',categories);
 
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
