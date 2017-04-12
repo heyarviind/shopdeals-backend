@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 var usersSchema = new mongoose.Schema({
 	categories : Array,
-	city : Number,
+	city : String,
 	email : String,
 	password : String,
 	isRetailer : Boolean,

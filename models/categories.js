@@ -1,15 +1,12 @@
 var mongoose = require('mongoose');
 
 var categoriesSchema = new mongoose.Schema({
-	name : String,
 	slug : String,
-	order : Number,
-	subCats : [{
-		name : String,
-		slug : String
-	}]
+	params : String,
+	path : String,
+	level : Number,
 });
 
-var categoriesModel = mongoose.model('sd_categories', categoriesSchema);
+var categoriesModel = mongoose.model('sd_product_categories', categoriesSchema);
 
 module.exports = categoriesModel;

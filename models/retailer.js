@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var adSchema = new mongoose.Schema({
+var productSchema = new mongoose.Schema({
 	title : String,
 	description : String,
 	slug : String,
@@ -10,11 +10,14 @@ var adSchema = new mongoose.Schema({
 	discountPer : Number,
 	postTime : Number,
 	uid : Number,
+	city : String,
 	views : Number,
 	likes: Number,
-	categories : String
+	categories : String,
+	active : Number,
+	params : Array
 });
 
-var adModel = mongoose.model('sd_ads', adSchema);
+var productModel = mongoose.model('sd_products', productSchema);
 
-module.exports = adModel;
+module.exports = productModel;

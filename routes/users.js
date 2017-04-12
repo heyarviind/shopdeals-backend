@@ -34,34 +34,34 @@ router.post('/auth', function(req, res, next){
 				success : false,
 				message : 'User not found!'
 			});
-		} else if(user){
+		} else if(user){ 
 
-			if(user.password != req.body.password){
-				res.json({
-					success : false,
-					message : 'Wrong password!'
-				});
-				} else {
+			bcrypt.compare(req.body.password, user.password, function(err, response){
+				if(err) throw err;
+
+				if(response){
 					var token = jwt.sign({objectID : user._id}, config.secretCode,{
 						expiresIn : 60*60*24
 					});
 
-				res.json({
-		          success: true,
-		          message: 'Enjoy your token!',
-		          token: token
-		        });
-			}
-		} else {
-			res.json({
-				success : false
+					res.json({
+			          success: true,
+			          message: 'Enjoy your token!',
+			          token: token
+			        });
+				} else {
+					res.json({
+						success : false,
+						message: 'not matched!'
+					})
+				}
+
+				
+
 			});
-			
 		}
-
-	})
-
-});
+	});
+	});
 
 router.get('/signup/step-one',function(req, res, next){
 	//just for testing
@@ -155,6 +155,8 @@ router.post('/signup/step-two',function(req, res, next){
     				longitude : req.body.longitude,
     				city : req.body.city
     			});
+
+    			console.log(userData);
   
     			usersModel.findOneAndUpdate({"_id" : decoded.objectID},userData,{upsert:true}, function(err, response){
     				if (err) throw err;
